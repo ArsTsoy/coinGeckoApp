@@ -11,8 +11,6 @@ import retrofit2.http.Query
 
 interface CoinInterface {
 
-//    api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false
-
     @GET("api/v3/coins/markets")
     fun getCoinList(
         @Query("vs_currency") vsCurrency: String,
@@ -20,7 +18,7 @@ interface CoinInterface {
         @Query("per_page") perPage: Int,
         @Query("page") page: Int,
         @Query("sparkline") sparkline: Boolean
-    ): Call<List<CoinModel>>
+    ): List<CoinModel>
     
 
 }
