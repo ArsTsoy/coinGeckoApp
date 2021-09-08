@@ -6,14 +6,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import kz.example.coingeckoapp.models.CoinModel
-import kz.example.coingeckoapp.retrofit.CoinInterface
+import kz.example.coingeckoapp.repositories.BaseCoinRepository
 
 private const val DEFAULT_START_PAGE = 1
 
 class CoinsListVM(
-    private val coinInterface: CoinInterface
+    private val coinRepository: BaseCoinRepository
 ): ViewModel() {
 
     //region Vars
@@ -50,21 +53,19 @@ class CoinsListVM(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isLoading.postValue(true)
-                val coins = coinInterface.getCoinList(
-                    "usd",
-                    "market_cap_desc",
-                    20,
-                    pageNumber,
-                    false
-                )
-                pageNumber++
-                isLoading.postValue(false)
-                if(isRefresh) {
-                    listOfCoins.clear()
-                }
-                listOfCoins.addAll(coins)
-                this@CoinsListVM.coins.postValue(listOfCoins)
-
+                coinRepository
+                    .getCoinList(pageNumber)
+                    .onCompletion {
+                        pageNumber++
+                        isLoading.postValue(false)
+                    }
+                    .collectLatest {
+                        if(isRefresh) {
+                            listOfCoins.clear()
+                        }
+                        listOfCoins.addAll(it)
+                        this@CoinsListVM.coins.postValue(listOfCoins)
+                    }
             } catch (e: Exception) {
                 isLoading.postValue(false)
                 Log.i("myCoinsListFragment", "$e")

@@ -1,5 +1,6 @@
 package kz.example.coingeckoapp.di.modules
 
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import kz.example.coingeckoapp.retrofit.CoinInterface
@@ -36,6 +37,12 @@ class NetworkModule {
     @Provides
     fun provideCoinInterface(retrofit: Retrofit): CoinInterface {
         return retrofit.create(CoinInterface::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesGson(): Gson {
+        return Gson()
     }
 
 
