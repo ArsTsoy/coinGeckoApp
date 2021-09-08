@@ -2,7 +2,7 @@ package kz.example.coingeckoapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.FrameLayout
+import kz.example.coingeckoapp.ui.coin_list.CoinsListFragment
 
 class MainActivity : AppCompatActivity() {
 
