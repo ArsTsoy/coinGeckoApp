@@ -1,6 +1,5 @@
 package kz.example.coingeckoapp.di.modules
 
-import com.jaredsburrows.retrofit2.adapter.synchronous.SynchronousCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import kz.example.coingeckoapp.retrofit.CoinInterface
@@ -29,7 +28,6 @@ class NetworkModule {
                     .writeTimeout(30, TimeUnit.SECONDS)
                     .build()
             )
-            .addCallAdapterFactory(SynchronousCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

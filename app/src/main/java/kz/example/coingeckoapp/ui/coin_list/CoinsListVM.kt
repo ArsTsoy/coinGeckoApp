@@ -1,14 +1,12 @@
 package kz.example.coingeckoapp.ui.coin_list
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kz.example.coingeckoapp.models.CoinModel
 import kz.example.coingeckoapp.retrofit.CoinInterface
 
@@ -19,7 +17,6 @@ class CoinsListVM(
 ): ViewModel() {
 
     //region Vars
-    private val compositeDisposable = CompositeDisposable()
     private var pageNumber: Int = DEFAULT_START_PAGE
     private val listOfCoins = mutableListOf<CoinModel>()
     //endregion
@@ -50,39 +47,29 @@ class CoinsListVM(
 
     private fun getCoins(isRefresh: Boolean) {
         isLoading.postValue(true)
-        val disposableGetCoinList = Single.fromCallable {
-            coinInterface.getCoinList(
-                "usd",
-                "market_cap_desc",
-                20,
-                pageNumber,
-                false
-            )
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                isLoading.postValue(true)
+                val coins = coinInterface.getCoinList(
+                    "usd",
+                    "market_cap_desc",
+                    20,
+                    pageNumber,
+                    false
+                )
+                pageNumber++
+                isLoading.postValue(false)
+                if(isRefresh) {
+                    listOfCoins.clear()
+                }
+                listOfCoins.addAll(coins)
+                this@CoinsListVM.coins.postValue(listOfCoins)
+
+            } catch (e: Exception) {
+                isLoading.postValue(false)
+                Log.i("myCoinsListFragment", "$e")
+            }
         }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe(
-                { coins ->
-
-                    pageNumber++
-                    isLoading.postValue(false)
-                    if(isRefresh) {
-                        listOfCoins.clear()
-                    }
-                    listOfCoins.addAll(coins)
-                    this.coins.postValue(listOfCoins)
-                }, {
-                    isLoading.postValue(false)
-                    Log.i("myCoinsListFragment", "$it")
-                })
-        compositeDisposable.add(disposableGetCoinList)
     }
-
-
-    override fun onCleared() {
-        compositeDisposable.clear()
-        super.onCleared()
-    }
-
 
 }

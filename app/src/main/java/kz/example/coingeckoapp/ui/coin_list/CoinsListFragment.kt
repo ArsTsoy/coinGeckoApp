@@ -3,15 +3,11 @@ package kz.example.coingeckoapp.ui.coin_list
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kz.example.coingeckoapp.App
 import kz.example.coingeckoapp.R
 import kz.example.coingeckoapp.recycler_views.CoinListAdapter

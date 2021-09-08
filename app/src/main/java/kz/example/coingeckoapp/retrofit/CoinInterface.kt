@@ -12,7 +12,7 @@ import retrofit2.http.Query
 interface CoinInterface {
 
     @GET("api/v3/coins/markets")
-    fun getCoinList(
+    suspend fun getCoinList(
         @Query("vs_currency") vsCurrency: String,
         @Query("order") order: String,
         @Query("per_page") perPage: Int,
