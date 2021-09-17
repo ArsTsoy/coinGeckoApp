@@ -1,10 +1,9 @@
 package kz.example.coingeckoapp.di
 
 import dagger.Component
-import kz.example.coingeckoapp.di.modules.AppModule
-import kz.example.coingeckoapp.di.modules.NetworkModule
-import kz.example.coingeckoapp.ui.coin_list.CoinsListFragment
-import kz.example.coingeckoapp.ui.coin_list.CoinsListVMFactory
+import kz.example.coingeckoapp.clean.presentation.ui.coin_list.CoinsListVMFactory
+import kz.example.data.di.AppModule
+import kz.example.data.di.NetworkModule
 import javax.inject.Singleton
 
 /**
@@ -19,8 +18,6 @@ import javax.inject.Singleton
     ]
 )
 interface ApplicationComponent {
-
-    fun provideIn(fragment: CoinsListFragment)
 
     fun getCoinsListVMFactory(): CoinsListVMFactory
 }

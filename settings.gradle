@@ -1,2 +1,4 @@
 include ':app'
 rootProject.name = "CoinGeckoApp"
+include ':domain'
+include ':data'

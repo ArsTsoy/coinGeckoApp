@@ -10,9 +10,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".App"
+        android:name=".clean.presentation.App"
         android:theme="@style/Theme.CoinGeckoApp">
-        <activity android:name=".MainActivity">
+        <activity android:name=".clean.presentation.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
